@@ -1,4 +1,4 @@
-# PITAC Driving Payslip
+# PITAC-MPC SPD Payslip Generator
 
 A desktop payslip generator for the PITAC Multipurpose Cooperative Special Project Division. It is built with React, Vite, and Electron, and can save an A4 payslip as a PDF or send it to a printer.
 
