@@ -4,6 +4,7 @@ const path = require('node:path');
 
 const devServerUrl = process.env.VITE_DEV_SERVER_URL;
 const appId = 'com.spd.logistics.payslip';
+const settingsFileName = 'settings.json';
 
 let mainWindow = null;
 
@@ -78,6 +79,36 @@ function createWindow() {
   }
 }
 
+function settingsFilePath() {
+  return path.join(app.getPath('userData'), settingsFileName);
+}
+
+async function readLastSaveDir() {
+  try {
+    const raw = await fs.readFile(settingsFilePath(), 'utf8');
+    const lastSaveDir = JSON.parse(raw)?.lastSaveDir;
+
+    if (typeof lastSaveDir !== 'string' || !lastSaveDir) return null;
+
+    const stats = await fs.stat(lastSaveDir);
+    return stats.isDirectory() ? lastSaveDir : null;
+  } catch {
+    return null;
+  }
+}
+
+async function saveLastSaveDir(dir) {
+  try {
+    await fs.mkdir(app.getPath('userData'), { recursive: true });
+    await fs.writeFile(
+      settingsFilePath(),
+      JSON.stringify({ lastSaveDir: dir }, null, 2),
+    );
+  } catch {
+    return;
+  }
+}
+
 function sanitizePdfFileName(value) {
   const baseName = path
     .basename(String(value || 'Payslip.pdf'))
@@ -96,12 +127,12 @@ ipcMain.handle('payslip:save-pdf', async (event, suggestedName) => {
     return { success: false, error: 'The payslip window is unavailable.' };
   }
 
+  const lastSaveDir = await readLastSaveDir();
+  const defaultDir = lastSaveDir ?? app.getPath('desktop');
+
   const { canceled, filePath } = await dialog.showSaveDialog(window, {
     title: 'Save payslip as PDF',
-    defaultPath: path.join(
-      app.getPath('documents'),
-      sanitizePdfFileName(suggestedName),
-    ),
+    defaultPath: path.join(defaultDir, sanitizePdfFileName(suggestedName)),
     filters: [{ name: 'PDF document', extensions: ['pdf'] }],
   });
 
@@ -122,6 +153,7 @@ ipcMain.handle('payslip:save-pdf', async (event, suggestedName) => {
     });
 
     await fs.writeFile(pdfFilePath, pdf);
+    await saveLastSaveDir(path.dirname(pdfFilePath));
 
     return { success: true, filePath: pdfFilePath };
   } catch (error) {
