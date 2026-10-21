@@ -1,7 +1,7 @@
 {
   "name": "spd-logistics-payslip-generator",
   "productName": "SPD Logistics Payslip Generator",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "description": "Payslip generator for SPD Logistics.",
   "author": "tyrone-serdan",
