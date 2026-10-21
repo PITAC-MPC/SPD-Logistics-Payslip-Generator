@@ -1,9 +1,9 @@
 {
-  "name": "pitac-mpc-spd-payslip",
-  "productName": "PITAC-MPC SPD Payslip",
+  "name": "spd-logistics-payslip-generator",
+  "productName": "SPD Logistics Payslip Generator",
   "version": "1.0.0",
   "private": true,
-  "description": "Payslip generator for PITAC-MPC Special Project Division.",
+  "description": "Payslip generator for SPD Logistics.",
   "author": "tyrone-serdan",
   "license": "UNLICENSED",
   "engines": {
@@ -23,8 +23,8 @@
     "dist": "npm run build && electron-builder"
   },
   "build": {
-    "appId": "com.pitac.driving.payslip",
-    "productName": "PITAC Driving Payslip",
+    "appId": "com.spd.logistics.payslip",
+    "productName": "SPD Logistics Payslip Generator",
     "directories": {
       "output": "release"
     },

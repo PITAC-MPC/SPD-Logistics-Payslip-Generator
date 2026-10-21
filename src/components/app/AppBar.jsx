@@ -7,9 +7,7 @@ export default function AppBar({ onNew, onPrint, onSavePdf, savingPdf }) {
             <i className="bi bi-truck" />
           </span>
           <span className="app-brand-copy">
-            <span className="app-brand-title">
-              PITAC-MPC Special Project Division
-            </span>
+            <span className="app-brand-title">SPD Logistics</span>
           </span>
         </div>
 

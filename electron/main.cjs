@@ -3,7 +3,7 @@ const fs = require('node:fs/promises');
 const path = require('node:path');
 
 const devServerUrl = process.env.VITE_DEV_SERVER_URL;
-const appId = 'com.pitac.driving.payslip';
+const appId = 'com.spd.logistics.payslip';
 
 let mainWindow = null;
 
@@ -44,7 +44,7 @@ function createWindow() {
     show: false,
     backgroundColor: '#f3f5f9',
     autoHideMenuBar: true,
-    title: 'PITAC Driving Payslip',
+    title: 'SPD Logistics Payslip Generator',
     webPreferences: {
       preload: path.join(__dirname, 'preload.cjs'),
       contextIsolation: true,

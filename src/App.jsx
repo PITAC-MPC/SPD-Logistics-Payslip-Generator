@@ -138,7 +138,7 @@ export default function App() {
           <article className="payslip-sheet">
             <header className="payslip-heading">
               <div>
-                <div className="payslip-kicker">PITAC-MPC SPD</div>
+                <div className="payslip-kicker">SPD Logistics</div>
                 <h1 className="payslip-title">Payslip Generator</h1>
               </div>
               <div className="payslip-heading-note">Payout</div>
