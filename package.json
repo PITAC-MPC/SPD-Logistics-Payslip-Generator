@@ -1,0 +1,78 @@
+{
+  "name": "pitac-mpc-spd-payslip",
+  "productName": "PITAC-MPC SPD Payslip",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Payslip generator for PITAC-MPC Special Project Division.",
+  "author": "tyrone-serdan",
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "type": "module",
+  "main": "electron/main.cjs",
+  "scripts": {
+    "dev": "concurrently -k \"vite\" \"wait-on tcp:5173 && cross-env VITE_DEV_SERVER_URL=http://localhost:5173 electron .\"",
+    "dev:renderer": "vite",
+    "dev:electron": "wait-on tcp:5173 && cross-env VITE_DEV_SERVER_URL=http://localhost:5173 electron .",
+    "build": "vite build",
+    "start": "npm run build && electron .",
+    "test": "vitest run",
+    "format": "prettier --write \"src/**/*.{js,jsx}\" \"electron/**/*.cjs\" \"tests/**/*.js\" \"*.{json,md}\"",
+    "format:check": "prettier --check \"src/**/*.{js,jsx}\" \"electron/**/*.cjs\" \"tests/**/*.js\" \"*.{json,md}\"",
+    "dist": "npm run build && electron-builder"
+  },
+  "build": {
+    "appId": "com.pitac.driving.payslip",
+    "productName": "PITAC Driving Payslip",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "package.json"
+    ],
+    "win": {
+      "icon": "build/icon.ico",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    },
+    "portable": {
+      "artifactName": "${productName} Portable ${version}.${ext}"
+    }
+  },
+  "dependencies": {
+    "bootstrap": "^5.3.8",
+    "bootstrap-icons": "^1.13.2",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^6.1.2",
+    "concurrently": "^10.0.6",
+    "cross-env": "^10.1.0",
+    "electron": "^44.9.1",
+    "electron-builder": "^26.15.3",
+    "prettier": "^3.9.10",
+    "vite": "^8.3.4",
+    "vitest": "^5.0.5",
+    "wait-on": "^9.5.1"
+  }
+}
