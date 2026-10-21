@@ -141,7 +141,7 @@ export default function App() {
                 <div className="payslip-kicker">PITAC-MPC SPD</div>
                 <h1 className="payslip-title">Payslip Generator</h1>
               </div>
-              <div className="payslip-heading-note">Driver payout</div>
+              <div className="payslip-heading-note">Payout</div>
             </header>
 
             <PayslipHeader meta={state.meta} onChange={updateMeta} />
