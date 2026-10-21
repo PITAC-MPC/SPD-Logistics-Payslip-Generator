@@ -76,7 +76,7 @@ export default function PrintPayslip({
           <div className="print-kicker">Special Project Division</div>
           <h1 className="print-title">Pitac Multipurpose Cooperative</h1>
         </div>
-        <div className="print-note">Driver payout</div>
+        <div className="print-note"></div>
       </header>
 
       <section className="print-meta">

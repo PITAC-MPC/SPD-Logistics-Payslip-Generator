@@ -43,7 +43,6 @@ function createWindow() {
     minWidth: 980,
     minHeight: 720,
     show: false,
-    backgroundColor: '#f3f5f9',
     autoHideMenuBar: true,
     title: 'SPD Logistics Payslip Generator',
     webPreferences: {
@@ -146,7 +145,7 @@ ipcMain.handle('payslip:save-pdf', async (event, suggestedName) => {
 
   try {
     const pdf = await window.webContents.printToPDF({
-      printBackground: true,
+      printBackground: false,
       pageSize: 'A4',
       landscape: false,
       preferCSSPageSize: true,
@@ -178,7 +177,7 @@ ipcMain.handle('payslip:print', async (event) => {
   return new Promise((resolve) => {
     window.webContents.print(
       {
-        printBackground: true,
+        printBackground: false,
         pageSize: 'A4',
         landscape: false,
       },

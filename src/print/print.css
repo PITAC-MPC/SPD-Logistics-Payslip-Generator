@@ -1,7 +1,3 @@
-.highlight {
-  background-color: yellow;
-}
-
 .print-document {
   display: none;
   color: #111827;
@@ -346,6 +342,7 @@
     margin: 12mm;
   }
 
+  #root,
   html,
   body {
     background: transparent !important;
@@ -360,6 +357,13 @@
   .toast-container,
   .no-print {
     display: none !important;
+  }
+
+  .highlight {
+    padding-right: 4pt;
+    padding-left: 4pt;
+    background-color: yellow;
+    box-shadow: inset 0 0 0 1000px yellow;
   }
 
   .print-document {
