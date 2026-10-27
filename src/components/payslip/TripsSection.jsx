@@ -1,5 +1,6 @@
 import SectionHeading from '../ui/SectionHeading';
-import Summary from './Summary';
+import DeductionsTable from './DeductionsTable';
+import SectionTotalRow from './SectionTotalRow';
 import TripRow from './TripRow';
 
 export default function TripsSection({
@@ -21,76 +22,104 @@ export default function TripsSection({
         eyebrow="Earnings"
         title="Trips"
         action={
-          <button
-            type="button"
-            className="btn btn-outline-primary btn-sm"
-            onClick={onAdd}
+          <div
+            className="section-actions"
+            data-nav-row
+            data-nav-section="trips"
+            data-row-type="actions"
           >
-            <i className="bi bi-plus-lg me-1" aria-hidden="true" />
-            Add Trip
-          </button>
+            <button
+              type="button"
+              data-nav
+              data-add-row-type="main"
+              className="btn btn-outline-primary btn-sm"
+              onClick={onAdd}
+            >
+              <i className="bi bi-plus-lg me-1" aria-hidden="true" />
+              Add Trip
+            </button>
+            <button
+              type="button"
+              data-nav
+              data-add-row-type="deduction"
+              className="btn btn-outline-secondary btn-sm"
+              onClick={onAddDeduction}
+            >
+              <i className="bi bi-dash-lg me-1" aria-hidden="true" />
+              Add Deduction
+            </button>
+          </div>
         }
       />
 
-      <div className="table-responsive payslip-table-wrap">
-        <table className="table payslip-table align-middle mb-0">
-          <colgroup>
-            <col className="col-index" />
-            <col />
-            <col className="col-trips" />
-            <col className="col-rate" />
-            <col className="col-amount" />
-            <col className="col-action" />
-          </colgroup>
-          <thead>
-            <tr>
-              <th scope="col" className="row-number">
-                #
-              </th>
-              <th scope="col">Location</th>
-              <th scope="col" className="numeric-cell text-end">
-                Trips
-              </th>
-              <th scope="col" className="numeric-cell text-end">
-                Rate (&#8369;)
-              </th>
-              <th scope="col" className="amount-cell text-end">
-                Amount
-              </th>
-              <th scope="col" className="row-action no-print" />
-            </tr>
-          </thead>
-          <tbody>
-            {rows.length === 0 ? (
+      <div className="payslip-table-wrap">
+        <div className="table-responsive">
+          <table className="table payslip-table align-middle mb-0">
+            <colgroup>
+              <col className="col-index" />
+              <col />
+              <col className="col-trips" />
+              <col className="col-rate" />
+              <col className="col-amount" />
+              <col className="col-action" />
+            </colgroup>
+            <thead>
               <tr>
-                <td colSpan={6} className="empty-state">
-                  No trips yet. Add a trip to get started.
-                </td>
+                <th scope="col" className="row-number">
+                  #
+                </th>
+                <th scope="col">Location</th>
+                <th scope="col" className="numeric-cell text-end">
+                  Trips
+                </th>
+                <th scope="col" className="numeric-cell text-end">
+                  Rate (&#8369;)
+                </th>
+                <th scope="col" className="amount-cell text-end">
+                  Amount
+                </th>
+                <th scope="col" className="row-action no-print" />
               </tr>
-            ) : (
-              rows.map((row, index) => (
-                <TripRow
-                  key={row.id}
-                  row={row}
-                  index={index}
-                  onUpdate={(field, value) => onUpdate(row.id, field, value)}
-                  onRemove={() => onRemove(row.id)}
-                />
-              ))
-            )}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {rows.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="empty-state">
+                    No trips yet. Add a trip to get started.
+                  </td>
+                </tr>
+              ) : (
+                rows.map((row, index) => (
+                  <TripRow
+                    key={row.id}
+                    row={row}
+                    index={index}
+                    onUpdate={(field, value) => onUpdate(row.id, field, value)}
+                    onRemove={() => onRemove(row.id)}
+                  />
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
 
-      <Summary
-        inputId="trip-deduction"
-        total={total}
-        deduction={deduction}
-        deductions={deductions}
-        net={net}
-        onDeductionUpdate={onDeductionUpdate}
-        onAddDeduction={onAddDeduction}
-        onRemoveDeduction={onRemoveDeduction}
+      <SectionTotalRow label="Total Trips Amount" amount={total} />
+
+      <DeductionsTable
+        section="trips"
+        rows={deductions}
+        onUpdate={onDeductionUpdate}
+        onRemove={onRemoveDeduction}
+      />
+
+      <SectionTotalRow label="Total Deductions" amount={deduction} prefix="−" />
+
+      <SectionTotalRow
+        label="Total"
+        amount={net}
+        variant="net"
+        isNegative={net < 0}
       />
     </section>
   );

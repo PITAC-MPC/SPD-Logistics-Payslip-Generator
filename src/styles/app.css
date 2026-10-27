@@ -662,6 +662,89 @@ input {
 	font-size: 0.78rem;
 }
 
+.section-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.4rem;
+}
+
+.deductions-block {
+	margin-top: 1rem;
+	background: #fbfcfe;
+}
+
+.deductions-heading {
+	padding: 0.55rem 0.75rem 0.35rem;
+	color: var(--payslip-muted);
+	font-size: 0.64rem;
+	font-weight: 700;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+}
+
+.deductions-table {
+	min-width: 0;
+	font-size: 0.82rem;
+}
+
+.deductions-table thead th {
+	padding-top: 0.3rem;
+	padding-bottom: 0.3rem;
+	background: transparent;
+	border-bottom: 1px solid var(--payslip-line);
+	font-size: 0.6rem;
+}
+
+.deductions-table tbody td {
+	padding: 0.28rem 0.6rem;
+}
+
+.deductions-number {
+	color: #94a3b8;
+}
+
+.section-total-row {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem;
+	width: min(100%, 360px);
+	margin: 0.65rem 0 0 auto;
+	padding: 0.45rem 0.15rem;
+	border-bottom: 1px solid var(--payslip-line);
+	font-size: 0.85rem;
+}
+
+.section-total-label {
+	color: var(--payslip-muted);
+	font-weight: 600;
+}
+
+.section-total-value {
+	font-weight: 600;
+	font-variant-numeric: tabular-nums;
+	white-space: nowrap;
+}
+
+.section-total-net {
+	margin-top: 0.8rem;
+	padding-top: 0.55rem;
+	border-top: 2px solid var(--payslip-ink);
+	border-bottom: 0;
+}
+
+.section-total-net .section-total-label,
+.section-total-net .section-total-value {
+	color: var(--payslip-ink);
+	font-size: 0.98rem;
+	font-weight: 700;
+}
+
+.section-total-net.is-negative .section-total-label,
+.section-total-net.is-negative .section-total-value {
+	color: var(--payslip-danger);
+}
+
 .toast-container {
 	z-index: 1080;
 }
@@ -706,7 +789,8 @@ input {
 	}
 
 	.summary-panel,
-	.summary-panel-compact {
+	.summary-panel-compact,
+	.section-total-row {
 		width: 100%;
 		margin-left: 0;
 	}
