@@ -4,6 +4,7 @@ import StatusToast from './components/app/StatusToast';
 import HelpersSection from './components/payslip/HelpersSection';
 import PayslipHeader from './components/payslip/PayslipHeader';
 import TripsSection from './components/payslip/TripsSection';
+import useGridNavigation from './hooks/useGridNavigation';
 import usePayslip from './hooks/usePayslip';
 import { computePayslip } from './lib/calculations';
 import { buildPdfFileName } from './lib/format';
@@ -29,6 +30,27 @@ export default function App() {
   } = usePayslip();
 
   const totals = useMemo(() => computePayslip(state), [state]);
+
+  useGridNavigation({
+    onAddRow: (section, rowType) => {
+      if (section === 'trips') {
+        if (rowType === 'deduction') addDeduction();
+        else addTrip();
+      } else if (section === 'helpers') {
+        if (rowType === 'deduction') addHelperDeduction();
+        else addHelper();
+      }
+    },
+    onRemoveRow: (section, rowType, id) => {
+      if (section === 'trips') {
+        if (rowType === 'deduction') removeDeduction(id);
+        else removeTrip(id);
+      } else if (section === 'helpers') {
+        if (rowType === 'deduction') removeHelperDeduction(id);
+        else removeHelper(id);
+      }
+    },
+  });
 
   const [status, setStatus] = useState(null);
   const [savingPdf, setSavingPdf] = useState(false);

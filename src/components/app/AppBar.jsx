@@ -11,7 +11,12 @@ export default function AppBar({ onNew, onPrint, onSavePdf, savingPdf }) {
           </span>
         </div>
 
-        <div className="app-actions">
+        <div
+          className="app-actions"
+          data-nav-row
+          data-nav-section="appbar"
+          data-row-type="actions"
+        >
           <button
             type="button"
             className="btn btn-outline-secondary btn-sm"
@@ -23,9 +28,9 @@ export default function AppBar({ onNew, onPrint, onSavePdf, savingPdf }) {
 
           <button
             type="button"
+            data-nav
             className="btn btn-outline-secondary btn-sm"
             onClick={onPrint}
-            disabled
           >
             <i className="bi bi-printer me-1" aria-hidden="true" />
             Print
@@ -33,6 +38,7 @@ export default function AppBar({ onNew, onPrint, onSavePdf, savingPdf }) {
 
           <button
             type="button"
+            data-nav
             className="btn btn-primary btn-sm"
             onClick={onSavePdf}
             disabled={savingPdf}

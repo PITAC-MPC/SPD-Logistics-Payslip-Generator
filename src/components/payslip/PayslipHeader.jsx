@@ -1,6 +1,11 @@
 export default function PayslipHeader({ meta, onChange }) {
   return (
-    <div className="row g-3 payslip-meta">
+    <div
+      className="row g-3 payslip-meta"
+      data-nav-row
+      data-nav-section="header"
+      data-row-type="meta"
+    >
       <div className="col-12 col-md-4">
         <label className="form-label field-label" htmlFor="payslip-name">
           Name
@@ -8,6 +13,7 @@ export default function PayslipHeader({ meta, onChange }) {
         <input
           id="payslip-name"
           type="text"
+          data-nav
           className="form-control meta-input"
           value={meta.name}
           onChange={(event) => onChange('name', event.target.value)}
@@ -26,6 +32,7 @@ export default function PayslipHeader({ meta, onChange }) {
         <input
           id="payslip-vehicle-type"
           type="text"
+          data-nav
           className="form-control meta-input"
           value={meta.vehicleType}
           onChange={(event) => onChange('vehicleType', event.target.value)}
@@ -41,6 +48,7 @@ export default function PayslipHeader({ meta, onChange }) {
         <input
           id="payslip-plate-no"
           type="text"
+          data-nav
           className="form-control meta-input"
           value={meta.plateNo}
           onChange={(event) => onChange('plateNo', event.target.value)}
@@ -56,6 +64,7 @@ export default function PayslipHeader({ meta, onChange }) {
         <input
           id="payslip-date"
           type="date"
+          data-nav
           className="form-control meta-input"
           value={meta.date}
           onChange={(event) => onChange('date', event.target.value)}

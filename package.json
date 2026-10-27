@@ -70,6 +70,7 @@
     "cross-env": "^10.1.0",
     "electron": "^44.9.1",
     "electron-builder": "^26.15.3",
+    "jsdom": "^29.1.1",
     "prettier": "^3.9.10",
     "vite": "^8.3.4",
     "vitest": "^5.0.5",

@@ -5,12 +5,19 @@ export default function HelperRow({ row, index, onUpdate, onRemove }) {
   const isEmpty = !row.rate;
 
   return (
-    <tr className={isEmpty ? 'payslip-row-empty' : undefined}>
+    <tr
+      className={isEmpty ? 'payslip-row-empty' : undefined}
+      data-nav-row
+      data-nav-section="helpers"
+      data-row-type="main"
+      data-row-id={row.id}
+    >
       <td className="row-number">{index + 1}</td>
 
       <td>
         <input
           type="text"
+          data-nav
           className="form-control form-control-sm table-input"
           value={row.name}
           onChange={(event) => onUpdate('name', event.target.value)}
@@ -22,6 +29,7 @@ export default function HelperRow({ row, index, onUpdate, onRemove }) {
 
       <td className="numeric-cell">
         <NumericInput
+          data-nav
           integer
           value={row.number}
           onValueChange={(value) => onUpdate('number', value)}
@@ -33,6 +41,7 @@ export default function HelperRow({ row, index, onUpdate, onRemove }) {
 
       <td className="numeric-cell">
         <NumericInput
+          data-nav
           value={row.rate}
           onValueChange={(value) => onUpdate('rate', value)}
           className="form-control-sm table-input text-end"
