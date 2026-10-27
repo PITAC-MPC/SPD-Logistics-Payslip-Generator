@@ -1,11 +1,11 @@
+import appIcon from '../../../build/icon.ico';
+
 export default function AppBar({ onNew, onPrint, onSavePdf, savingPdf }) {
   return (
     <header className="app-bar no-print">
       <div className="container-xxl app-bar-inner">
         <div className="app-brand">
-          <span className="app-brand-icon" aria-hidden="true">
-            <i className="bi bi-truck" />
-          </span>
+          <img className="app-brand-icon" src={appIcon} alt="" />
           <span className="app-brand-copy">
             <span className="app-brand-title">SPD Logistics</span>
           </span>
