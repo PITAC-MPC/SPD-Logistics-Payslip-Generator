@@ -1,9 +1,9 @@
 import SectionHeading from '../ui/SectionHeading';
 import DeductionsTable from './DeductionsTable';
+import DescriptionRow from './DescriptionRow';
 import SectionTotalRow from './SectionTotalRow';
-import TripRow from './TripRow';
 
-export default function TripsSection({
+export default function DescriptionsSection({
   rows,
   total,
   deduction,
@@ -19,13 +19,12 @@ export default function TripsSection({
   return (
     <section className="payslip-section">
       <SectionHeading
-        eyebrow="Earnings"
-        title="Trips"
+        eyebrow="Payouts"
         action={
           <div
             className="section-actions"
             data-nav-row
-            data-nav-section="trips"
+            data-nav-section="descriptions"
             data-row-type="actions"
           >
             <button
@@ -36,7 +35,7 @@ export default function TripsSection({
               onClick={onAdd}
             >
               <i className="bi bi-plus-lg me-1" aria-hidden="true" />
-              Add Trip
+              Add Description
             </button>
             <button
               type="button"
@@ -58,7 +57,7 @@ export default function TripsSection({
             <colgroup>
               <col className="col-index" />
               <col />
-              <col className="col-trips" />
+              <col className="col-quantity" />
               <col className="col-rate" />
               <col className="col-amount" />
               <col className="col-action" />
@@ -68,9 +67,9 @@ export default function TripsSection({
                 <th scope="col" className="row-number">
                   #
                 </th>
-                <th scope="col">Location</th>
+                <th scope="col">Description</th>
                 <th scope="col" className="numeric-cell text-end">
-                  Trips
+                  Quantity
                 </th>
                 <th scope="col" className="numeric-cell text-end">
                   Rate (&#8369;)
@@ -85,12 +84,12 @@ export default function TripsSection({
               {rows.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="empty-state">
-                    No trips yet. Add a trip to get started.
+                    No descriptions yet. Add one to get started.
                   </td>
                 </tr>
               ) : (
                 rows.map((row, index) => (
-                  <TripRow
+                  <DescriptionRow
                     key={row.id}
                     row={row}
                     index={index}
@@ -104,10 +103,10 @@ export default function TripsSection({
         </div>
       </div>
 
-      <SectionTotalRow label="Total Trips Amount" amount={total} />
+      <SectionTotalRow label="Total Amount" amount={total} />
 
       <DeductionsTable
-        section="trips"
+        section="descriptions"
         rows={deductions}
         onUpdate={onDeductionUpdate}
         onRemove={onRemoveDeduction}

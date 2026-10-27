@@ -1,9 +1,9 @@
 import { round2, toNumber } from './format';
 
-export function computeTripRows(trips = []) {
-  return trips.map((row) => ({
+export function computeDescriptionRows(descriptions = []) {
+  return descriptions.map((row) => ({
     ...row,
-    amount: round2(toNumber(row.trips) * toNumber(row.rate)),
+    amount: round2(toNumber(row.quantity ?? row.trips) * toNumber(row.rate)),
   }));
 }
 
@@ -24,12 +24,17 @@ function deductionTotal(rows, legacyAmount) {
 }
 
 export function computePayslip(state) {
-  const tripRows = computeTripRows(state?.trips);
+  const descriptionRows = computeDescriptionRows(
+    state?.descriptions ?? state?.trips,
+  );
   const helperRows = computeHelperRows(state?.helpers);
 
-  const tripTotal = sumAmounts(tripRows);
-  const tripDeduction = deductionTotal(state?.deductions, state?.deduction);
-  const tripNet = round2(tripTotal - tripDeduction);
+  const descriptionTotal = sumAmounts(descriptionRows);
+  const descriptionDeduction = deductionTotal(
+    state?.deductions,
+    state?.deduction,
+  );
+  const descriptionNet = round2(descriptionTotal - descriptionDeduction);
 
   const helperTotal = sumAmounts(helperRows);
   const helperDeduction = deductionTotal(
@@ -39,10 +44,10 @@ export function computePayslip(state) {
   const helperNet = round2(helperTotal - helperDeduction);
 
   return {
-    tripRows,
-    tripTotal,
-    tripDeduction,
-    tripNet,
+    descriptionRows,
+    descriptionTotal,
+    descriptionDeduction,
+    descriptionNet,
     helperRows,
     helperTotal,
     helperDeduction,

@@ -2,8 +2,6 @@
 
 A desktop payslip generator for SPD Logistics. It is built with React, Vite, and Electron, and can save an A4 payslip as a PDF or send it to a printer.
 
-The front-end Print button is currently disabled. The Electron print handler and preload bridge remain in place so the feature can be re-enabled from the UI later.
-
 ## Requirements
 
 - Node.js 22.12 or newer
@@ -47,29 +45,31 @@ npm run dist      # Build the Windows NSIS and portable releases
 
 ### Application Entry Files
 
-| File           | Purpose                                                                                                                                                                                                                                                                                   |
-| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `src/main.jsx` | Browser entry point. Imports Bootstrap, Bootstrap Icons, application styles, and print styles, then mounts `App` into `#root`.                                                                                                                                                            |
-| `src/App.jsx`  | Main application component. Connects the payslip state hook, calculates totals, handles new/reset, print, and save-PDF actions, and renders both the editable screen UI and the hidden print document. The print action remains implemented even though its button is currently disabled. |
+| File           | Purpose                                                                                                                                                                                                |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `src/main.jsx` | Browser entry point. Imports Bootstrap, Bootstrap Icons, application styles, and print styles, then mounts `App` into `#root`.                                                                         |
+| `src/App.jsx`  | Main application component. Connects the payslip state hook, calculates totals, handles new/reset, print, and save-PDF actions, and renders both the editable screen UI and the hidden print document. |
 
 ### App Components
 
-| File                                 | Purpose                                                                                                                                               |
-| ------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `src/components/app/AppBar.jsx`      | Top application toolbar. Contains New Payslip, Print, and Save as PDF actions. The Print button is currently disabled; Save as PDF remains available. |
-| `src/components/app/StatusToast.jsx` | Floating toast notification used for success, cancellation, and error feedback. It is excluded from printed output.                                   |
+| File                                 | Purpose                                                                                                             |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------- |
+| `src/components/app/AppBar.jsx`      | Top application toolbar. Contains New Payslip, Print, and Save as PDF actions.                                      |
+| `src/components/app/StatusToast.jsx` | Floating toast notification used for success, cancellation, and error feedback. It is excluded from printed output. |
 
 ### Payslip Components
 
-| File                                        | Purpose                                                                                                                                                                            |
-| ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `src/components/payslip/PayslipHeader.jsx`  | Driver metadata form for name, vehicle type, plate number, and date.                                                                                                               |
-| `src/components/payslip/TripsSection.jsx`   | Trip earnings section. Renders the trip table, Add Trip action, empty state, and the trip summary.                                                                                 |
-| `src/components/payslip/TripRow.jsx`        | Editable row for one trip. Handles location, trip count, rate, computed amount, and row removal.                                                                                   |
-| `src/components/payslip/HelpersSection.jsx` | Helper payout section. Renders the helper table, Add Helper action, empty state, and compact helper summary.                                                                       |
-| `src/components/payslip/HelperRow.jsx`      | Editable row for one helper. Handles helper name, headcount, rate, computed amount, and row removal.                                                                               |
-| `src/components/payslip/Summary.jsx`        | Shared total/deduction/net panel. Supports multiple deduction rows with editable reasons and amounts, add/remove actions, negative-net styling, and a compact variant for helpers. |
-| `src/components/payslip/PrintFooter.jsx`    | Print-only signature area with side-by-side "Prepared By" and "Received by" lines.                                                                                                 |
+| File                                             | Purpose                                                                                                                           |
+| ------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------- |
+| `src/components/payslip/PayslipHeader.jsx`       | Driver metadata form for name, vehicle type, plate number, and date.                                                              |
+| `src/components/payslip/DescriptionsSection.jsx` | Payout descriptions section. Renders the description table, Add Description action, empty state, deduction sub-table, and totals. |
+| `src/components/payslip/DescriptionRow.jsx`      | Editable row for one payout description. Handles description, quantity, rate, computed amount, and row removal.                   |
+| `src/components/payslip/HelpersSection.jsx`      | Helper payout section. Renders the helper table, Add Helper action, empty state, deduction sub-table, and totals.                 |
+| `src/components/payslip/HelperRow.jsx`           | Editable row for one helper. Handles helper name, headcount, rate, computed amount, and row removal.                              |
+| `src/components/payslip/DeductionsTable.jsx`     | Deduction sub-table for a section. Renders the deductions heading, rows, remove actions, and empty state.                         |
+| `src/components/payslip/DeductionRow.jsx`        | Editable deduction row with reason, amount, and row removal.                                                                      |
+| `src/components/payslip/SectionTotalRow.jsx`     | Labeled total row used for total amount, total deductions, and net total.                                                         |
+| `src/components/payslip/PrintFooter.jsx`         | Print-only signature area with side-by-side "Prepared By" and "Received by" lines.                                                |
 
 ### Shared UI Components
 
@@ -80,17 +80,17 @@ npm run dist      # Build the Windows NSIS and portable releases
 
 ### State, Calculations, and Formatting
 
-| File                      | Purpose                                                                                                                                                                                                                                         |
-| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `src/hooks/usePayslip.js` | Central payslip state hook. Creates default rows, loads and saves drafts in `localStorage`, migrates older deduction data, normalizes stored values, and provides update/add/remove/reset actions for metadata, trips, helpers, and deductions. |
-| `src/lib/calculations.js` | Pure calculation helpers. Computes trip and helper line amounts, sums rows and deductions, and derives trip/helper totals, deductions, and net pay.                                                                                             |
-| `src/lib/format.js`       | Shared formatting and validation helpers. Formats Philippine pesos and long dates, converts and rounds numbers, sanitizes integer/decimal input, produces today's ISO date, and builds safe PDF filenames.                                      |
+| File                      | Purpose                                                                                                                                                                                                                                              |
+| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `src/hooks/usePayslip.js` | Central payslip state hook. Creates default rows, loads and saves drafts in `localStorage`, migrates older draft shapes, normalizes stored values, and provides update/add/remove/reset actions for metadata, descriptions, helpers, and deductions. |
+| `src/lib/calculations.js` | Pure calculation helpers. Computes description and helper line amounts, sums rows and deductions, and derives description/helper totals, deductions, and net pay.                                                                                    |
+| `src/lib/format.js`       | Shared formatting and validation helpers. Formats Philippine pesos and long dates, converts and rounds numbers, sanitizes integer/decimal input, produces today's ISO date, and builds safe PDF filenames.                                           |
 
 ### Print Files
 
 | File                         | Purpose                                                                                                                                                                                                    |
 | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `src/print/PrintPayslip.jsx` | Hidden A4 print document. Filters blank rows, renders the company header, driver metadata, trip and helper tables, totals and deduction summaries, Net highlighting, and the signature footer.             |
+| `src/print/PrintPayslip.jsx` | Hidden A4 print document. Filters blank rows, renders the company header, driver metadata, description and helper tables, totals and deduction summaries, Net highlighting, and the signature footer.      |
 | `src/print/print.css`        | Print-only styling. Hides the screen UI, defines A4 page margins and typography, formats tables and summaries, applies the Net highlight, prevents page breaks inside key blocks, and lays out the footer. |
 
 ### Styling
@@ -101,9 +101,11 @@ npm run dist      # Build the Windows NSIS and portable releases
 
 ### Tests
 
-| File                         | Purpose                                                                                                                                                                              |
-| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `tests/calculations.test.js` | Vitest coverage for trip/helper calculations, multiple and negative deductions, blank input handling, rounding, input sanitizers, date/peso formatting, and PDF filename generation. |
+| File                               | Purpose                                                                                                                                                                                     |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `tests/calculations.test.js`       | Vitest coverage for description/helper calculations, multiple and negative deductions, blank input handling, rounding, input sanitizers, date/peso formatting, and PDF filename generation. |
+| `tests/gridNavigation.test.js`     | Unit coverage for row/column keyboard navigation bounds, clamping, empty rows, and cross-section traversal.                                                                                 |
+| `tests/gridNavigation.dom.test.js` | jsdom integration coverage for the app bar, header, section actions, and add/remove keyboard flows.                                                                                         |
 
 ## Generated Directories
 
@@ -113,9 +115,9 @@ These directories are created by tooling and are not source files:
 - `release/` - Electron Builder installers and portable executables.
 - `node_modules/` - Installed npm dependencies.
 
-## Printing Status
+## Printing
 
-The Print button in `src/components/app/AppBar.jsx` is disabled. The following layers are intentionally unchanged and still functional for when printing is re-enabled:
+The Print button in `src/components/app/AppBar.jsx` sends the payslip to the system print dialog. The feature uses:
 
 - `src/App.jsx` - `handlePrint` calls the preload API.
 - `electron/preload.cjs` - exposes `window.payslipApi.print()`.

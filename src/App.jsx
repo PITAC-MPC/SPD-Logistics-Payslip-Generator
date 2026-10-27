@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import AppBar from './components/app/AppBar';
 import StatusToast from './components/app/StatusToast';
+import DescriptionsSection from './components/payslip/DescriptionsSection';
 import HelpersSection from './components/payslip/HelpersSection';
 import PayslipHeader from './components/payslip/PayslipHeader';
-import TripsSection from './components/payslip/TripsSection';
 import useGridNavigation from './hooks/useGridNavigation';
 import usePayslip from './hooks/usePayslip';
 import { computePayslip } from './lib/calculations';
@@ -14,9 +14,9 @@ export default function App() {
   const {
     state,
     updateMeta,
-    updateTrip,
-    addTrip,
-    removeTrip,
+    updateDescription,
+    addDescription,
+    removeDescription,
     updateDeduction,
     addDeduction,
     removeDeduction,
@@ -33,18 +33,18 @@ export default function App() {
 
   useGridNavigation({
     onAddRow: (section, rowType) => {
-      if (section === 'trips') {
+      if (section === 'descriptions') {
         if (rowType === 'deduction') addDeduction();
-        else addTrip();
+        else addDescription();
       } else if (section === 'helpers') {
         if (rowType === 'deduction') addHelperDeduction();
         else addHelper();
       }
     },
     onRemoveRow: (section, rowType, id) => {
-      if (section === 'trips') {
+      if (section === 'descriptions') {
         if (rowType === 'deduction') removeDeduction(id);
-        else removeTrip(id);
+        else removeDescription(id);
       } else if (section === 'helpers') {
         if (rowType === 'deduction') removeHelperDeduction(id);
         else removeHelper(id);
@@ -170,15 +170,15 @@ export default function App() {
 
             <hr className="payslip-divider" />
 
-            <TripsSection
-              rows={totals.tripRows}
-              total={totals.tripTotal}
-              deduction={totals.tripDeduction}
+            <DescriptionsSection
+              rows={totals.descriptionRows}
+              total={totals.descriptionTotal}
+              deduction={totals.descriptionDeduction}
               deductions={state.deductions}
-              net={totals.tripNet}
-              onUpdate={updateTrip}
-              onAdd={addTrip}
-              onRemove={removeTrip}
+              net={totals.descriptionNet}
+              onUpdate={updateDescription}
+              onAdd={addDescription}
+              onRemove={removeDescription}
               onDeductionUpdate={updateDeduction}
               onAddDeduction={addDeduction}
               onRemoveDeduction={removeDeduction}

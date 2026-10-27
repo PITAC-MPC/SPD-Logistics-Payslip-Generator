@@ -1,14 +1,14 @@
 import { formatPeso } from '../../lib/format';
 import NumericInput from '../ui/NumericInput';
 
-export default function TripRow({ row, index, onUpdate, onRemove }) {
-  const isEmpty = !row.location.trim() && !row.trips && !row.rate;
+export default function DescriptionRow({ row, index, onUpdate, onRemove }) {
+  const isEmpty = !row.description.trim() && !row.quantity && !row.rate;
 
   return (
     <tr
       className={isEmpty ? 'payslip-row-empty' : undefined}
       data-nav-row
-      data-nav-section="trips"
+      data-nav-section="descriptions"
       data-row-type="main"
       data-row-id={row.id}
     >
@@ -19,10 +19,10 @@ export default function TripRow({ row, index, onUpdate, onRemove }) {
           type="text"
           data-nav
           className="form-control form-control-sm table-input"
-          value={row.location}
-          onChange={(event) => onUpdate('location', event.target.value)}
-          placeholder="Enter location"
-          aria-label={`Location for trip ${index + 1}`}
+          value={row.description}
+          onChange={(event) => onUpdate('description', event.target.value)}
+          placeholder="Enter description"
+          aria-label={`Description for row ${index + 1}`}
           autoComplete="off"
         />
       </td>
@@ -31,11 +31,11 @@ export default function TripRow({ row, index, onUpdate, onRemove }) {
         <NumericInput
           data-nav
           integer
-          value={row.trips}
-          onValueChange={(value) => onUpdate('trips', value)}
+          value={row.quantity}
+          onValueChange={(value) => onUpdate('quantity', value)}
           className="form-control-sm table-input text-end"
           placeholder="0"
-          aria-label={`Number of trips for trip ${index + 1}`}
+          aria-label={`Quantity for row ${index + 1}`}
         />
       </td>
 
@@ -46,7 +46,7 @@ export default function TripRow({ row, index, onUpdate, onRemove }) {
           onValueChange={(value) => onUpdate('rate', value)}
           className="form-control-sm table-input text-end"
           placeholder="0.00"
-          aria-label={`Rate for trip ${index + 1}`}
+          aria-label={`Rate for row ${index + 1}`}
         />
       </td>
 
@@ -57,7 +57,7 @@ export default function TripRow({ row, index, onUpdate, onRemove }) {
           type="button"
           className="btn btn-sm btn-link row-remove"
           onClick={onRemove}
-          aria-label={`Remove trip ${index + 1}`}
+          aria-label={`Remove row ${index + 1}`}
           title="Remove row"
         >
           <i className="bi bi-x-lg" aria-hidden="true" />

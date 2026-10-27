@@ -85,21 +85,21 @@ describe('vertical navigation', () => {
 describe('cross-section traversal', () => {
   const rows = [3, 3, 2, 3, 2];
 
-  it('flows from trip rows into trip deductions', () => {
+  it('flows from description rows into description deductions', () => {
     expect(move(1, 2, rows, NAV_DIRECTIONS.down)).toEqual({
       rowIndex: 2,
       colIndex: 1,
     });
   });
 
-  it('flows from trip deductions into helper rows', () => {
+  it('flows from description deductions into helper rows', () => {
     expect(move(2, 1, rows, NAV_DIRECTIONS.down)).toEqual({
       rowIndex: 3,
       colIndex: 1,
     });
   });
 
-  it('flows back up from helpers into trip deductions', () => {
+  it('flows back up from helpers into description deductions', () => {
     expect(move(3, 0, rows, NAV_DIRECTIONS.up)).toEqual({
       rowIndex: 2,
       colIndex: 0,

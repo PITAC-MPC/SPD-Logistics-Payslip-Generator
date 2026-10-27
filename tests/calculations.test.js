@@ -18,7 +18,7 @@ function makeState(overrides = {}) {
       plateNo: '',
       date: '2026-10-20',
     },
-    trips: [],
+    descriptions: [],
     deductions: [],
     helpers: [],
     helperDeductions: [],
@@ -26,38 +26,40 @@ function makeState(overrides = {}) {
   };
 }
 
-describe('trip calculations', () => {
-  it('multiplies trips by rate and totals the rows', () => {
+describe('description calculations', () => {
+  it('multiplies quantities by rate and totals the rows', () => {
     const result = computePayslip(
       makeState({
-        trips: [
-          { trips: '2', rate: '150' },
-          { trips: '3', rate: '100.50' },
+        descriptions: [
+          { quantity: '2', rate: '150' },
+          { quantity: '3', rate: '100.50' },
         ],
       }),
     );
 
-    expect(result.tripRows.map((row) => row.amount)).toEqual([300, 301.5]);
-    expect(result.tripTotal).toBe(601.5);
+    expect(result.descriptionRows.map((row) => row.amount)).toEqual([
+      300, 301.5,
+    ]);
+    expect(result.descriptionTotal).toBe(601.5);
   });
 
-  it('subtracts the deduction rows from the trip total', () => {
+  it('subtracts the deduction rows from the description total', () => {
     const result = computePayslip(
       makeState({
-        trips: [{ trips: '4', rate: '125' }],
+        descriptions: [{ quantity: '4', rate: '125' }],
         deductions: [{ id: 'd1', reason: 'Fuel advance', amount: '100.50' }],
       }),
     );
 
-    expect(result.tripTotal).toBe(500);
-    expect(result.tripDeduction).toBe(100.5);
-    expect(result.tripNet).toBe(399.5);
+    expect(result.descriptionTotal).toBe(500);
+    expect(result.descriptionDeduction).toBe(100.5);
+    expect(result.descriptionNet).toBe(399.5);
   });
 
-  it('sums multiple trip deductions', () => {
+  it('sums multiple description deductions', () => {
     const result = computePayslip(
       makeState({
-        trips: [{ trips: '2', rate: '500' }],
+        descriptions: [{ quantity: '2', rate: '500' }],
         deductions: [
           { id: 'd1', reason: 'Fuel advance', amount: '100' },
           { id: 'd2', reason: 'Cash advance', amount: '75.25' },
@@ -65,19 +67,19 @@ describe('trip calculations', () => {
       }),
     );
 
-    expect(result.tripDeduction).toBe(175.25);
-    expect(result.tripNet).toBe(824.75);
+    expect(result.descriptionDeduction).toBe(175.25);
+    expect(result.descriptionNet).toBe(824.75);
   });
 
   it('allows a negative net when the deduction is larger than the total', () => {
     const result = computePayslip(
       makeState({
-        trips: [{ trips: '1', rate: '100' }],
+        descriptions: [{ quantity: '1', rate: '100' }],
         deductions: [{ id: 'd1', reason: 'Advance', amount: '150' }],
       }),
     );
 
-    expect(result.tripNet).toBe(-50);
+    expect(result.descriptionNet).toBe(-50);
   });
 });
 
@@ -96,17 +98,17 @@ describe('helper calculations', () => {
     expect(result.helperTotal).toBe(600.25);
   });
 
-  it('keeps the helper net separate from the trip net', () => {
+  it('keeps the helper net separate from the description net', () => {
     const result = computePayslip(
       makeState({
-        trips: [{ trips: '2', rate: '500' }],
+        descriptions: [{ description: 'Route A', quantity: '2', rate: '500' }],
         deductions: [{ id: 'd1', reason: 'Fuel', amount: '100' }],
         helpers: [{ name: 'Helper', number: '1', rate: '200' }],
         helperDeductions: [{ id: 'h1', reason: 'Advance', amount: '25' }],
       }),
     );
 
-    expect(result.tripNet).toBe(900);
+    expect(result.descriptionNet).toBe(900);
     expect(result.helperNet).toBe(175);
   });
 
@@ -130,15 +132,15 @@ describe('blank and numeric input handling', () => {
   it('treats blank values as zero', () => {
     const result = computePayslip(
       makeState({
-        trips: [{ trips: '', rate: '' }],
+        descriptions: [{ description: '', quantity: '', rate: '' }],
         deductions: [{ id: 'd1', reason: '', amount: '' }],
         helpers: [{ name: 'Helper', number: '', rate: '' }],
         helperDeductions: [{ id: 'h1', reason: '', amount: '' }],
       }),
     );
 
-    expect(result.tripTotal).toBe(0);
-    expect(result.tripNet).toBe(0);
+    expect(result.descriptionTotal).toBe(0);
+    expect(result.descriptionNet).toBe(0);
     expect(result.helperTotal).toBe(0);
     expect(result.helperNet).toBe(0);
   });
@@ -146,7 +148,7 @@ describe('blank and numeric input handling', () => {
   it('handles a missing state safely', () => {
     const result = computePayslip();
 
-    expect(result.tripTotal).toBe(0);
+    expect(result.descriptionTotal).toBe(0);
     expect(result.helperTotal).toBe(0);
   });
 
@@ -159,7 +161,7 @@ describe('blank and numeric input handling', () => {
 });
 
 describe('input sanitizers', () => {
-  it('keeps only whole numbers for trips and headcount', () => {
+  it('keeps only whole numbers for quantities and headcount', () => {
     expect(sanitizeIntegerString('12a3.4')).toBe('1234');
     expect(sanitizeIntegerString('-5')).toBe('5');
   });

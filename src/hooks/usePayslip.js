@@ -19,11 +19,11 @@ function makeId() {
   return `row-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
 }
 
-function createTrip() {
+function createDescription() {
   return {
     id: makeId(),
-    location: '',
-    trips: '',
+    description: '',
+    quantity: '',
     rate: '',
   };
 }
@@ -53,18 +53,18 @@ export function createEmptyState() {
       plateNo: '',
       date: todayISO(),
     },
-    trips: Array.from({ length: 5 }, createTrip),
+    descriptions: Array.from({ length: 5 }, createDescription),
     deductions: [createDeduction()],
     helpers: [createHelper()],
     helperDeductions: [createDeduction()],
   };
 }
 
-function normalizeTrip(row) {
+function normalizeDescription(row) {
   return {
     id: typeof row?.id === 'string' && row.id ? row.id : makeId(),
-    location: String(row?.location ?? ''),
-    trips: sanitizeIntegerString(row?.trips ?? ''),
+    description: String(row?.description ?? row?.location ?? ''),
+    quantity: sanitizeIntegerString(row?.quantity ?? row?.trips ?? ''),
     rate: sanitizeDecimalString(row?.rate ?? ''),
   };
 }
@@ -128,6 +128,9 @@ function loadDraft() {
       typeof meta.date === 'string' && ISO_DATE_PATTERN.test(meta.date)
         ? meta.date
         : fallback.meta.date;
+    const storedDescriptions = Array.isArray(parsed?.descriptions)
+      ? parsed.descriptions
+      : parsed?.trips;
 
     return {
       meta: {
@@ -136,9 +139,9 @@ function loadDraft() {
         plateNo: String(meta.plateNo ?? ''),
         date: storedDate,
       },
-      trips: Array.isArray(parsed?.trips)
-        ? parsed.trips.map(normalizeTrip)
-        : fallback.trips,
+      descriptions: Array.isArray(storedDescriptions)
+        ? storedDescriptions.map(normalizeDescription)
+        : fallback.descriptions,
       deductions: normalizeDeductions(
         parsed?.deductions,
         parsed?.deduction,
@@ -185,22 +188,22 @@ export default function usePayslip() {
     }));
   };
 
-  const updateTrip = (id, field, value) => {
+  const updateDescription = (id, field, value) => {
     setState((current) => ({
       ...current,
-      trips: current.trips.map((row) => {
+      descriptions: current.descriptions.map((row) => {
         if (row.id !== id) return row;
 
-        if (field === 'trips') {
-          return { ...row, trips: sanitizeIntegerString(value) };
+        if (field === 'quantity') {
+          return { ...row, quantity: sanitizeIntegerString(value) };
         }
 
         if (field === 'rate') {
           return { ...row, rate: sanitizeDecimalString(value) };
         }
 
-        if (field === 'location') {
-          return { ...row, location: String(value ?? '') };
+        if (field === 'description') {
+          return { ...row, description: String(value ?? '') };
         }
 
         return row;
@@ -208,17 +211,17 @@ export default function usePayslip() {
     }));
   };
 
-  const addTrip = () => {
+  const addDescription = () => {
     setState((current) => ({
       ...current,
-      trips: [...current.trips, createTrip()],
+      descriptions: [...current.descriptions, createDescription()],
     }));
   };
 
-  const removeTrip = (id) => {
+  const removeDescription = (id) => {
     setState((current) => ({
       ...current,
-      trips: current.trips.filter((row) => row.id !== id),
+      descriptions: current.descriptions.filter((row) => row.id !== id),
     }));
   };
 
@@ -319,9 +322,9 @@ export default function usePayslip() {
   return {
     state,
     updateMeta,
-    updateTrip,
-    addTrip,
-    removeTrip,
+    updateDescription,
+    addDescription,
+    removeDescription,
     updateDeduction,
     addDeduction,
     removeDeduction,

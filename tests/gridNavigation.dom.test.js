@@ -22,9 +22,9 @@ function keydown(target, key, options = {}) {
   return event;
 }
 
-function tripRows() {
+function descriptionRows() {
   return container.querySelectorAll(
-    'tr[data-nav-section="trips"][data-row-type="main"]',
+    'tr[data-nav-section="descriptions"][data-row-type="main"]',
   );
 }
 
@@ -34,9 +34,9 @@ async function flushAnimationFrame() {
   });
 }
 
-function tripActionButtons() {
+function descriptionActionButtons() {
   return container.querySelectorAll(
-    '[data-nav-section="trips"][data-row-type="actions"] button[data-nav]',
+    '[data-nav-section="descriptions"][data-row-type="actions"] button[data-nav]',
   );
 }
 
@@ -142,7 +142,7 @@ describe('header and app bar in the keyboard grid', () => {
 
     expect(document.activeElement).toBe(date);
 
-    const [, addDeductionButton] = tripActionButtons();
+    const [, addDeductionButton] = descriptionActionButtons();
 
     act(() => {
       keydown(date, 'ArrowDown');
@@ -184,7 +184,7 @@ describe('header and app bar in the keyboard grid', () => {
 
   it('does not remove rows with Ctrl+Delete in the header', () => {
     const [name] = headerInputs();
-    const before = tripRows().length;
+    const before = descriptionRows().length;
 
     act(() => {
       name.focus();
@@ -194,14 +194,14 @@ describe('header and app bar in the keyboard grid', () => {
       keydown(name, 'Delete', { ctrlKey: true });
     });
 
-    expect(tripRows().length).toBe(before);
+    expect(descriptionRows().length).toBe(before);
   });
 });
 
 describe('section action buttons in the keyboard grid', () => {
-  it('reaches the action buttons with ArrowUp from the first trip row', () => {
-    const firstCell = tripRows()[0].querySelector('input[data-nav]');
-    const [addTripButton] = tripActionButtons();
+  it('reaches the action buttons with ArrowUp from the first description row', () => {
+    const firstCell = descriptionRows()[0].querySelector('input[data-nav]');
+    const [addDescriptionButton] = descriptionActionButtons();
 
     act(() => {
       firstCell.focus();
@@ -211,18 +211,19 @@ describe('section action buttons in the keyboard grid', () => {
       keydown(firstCell, 'ArrowUp');
     });
 
-    expect(document.activeElement).toBe(addTripButton);
+    expect(document.activeElement).toBe(addDescriptionButton);
   });
 
   it('moves between the action buttons with ArrowLeft/ArrowRight', () => {
-    const [addTripButton, addDeductionButton] = tripActionButtons();
+    const [addDescriptionButton, addDeductionButton] =
+      descriptionActionButtons();
 
     act(() => {
-      addTripButton.focus();
+      addDescriptionButton.focus();
     });
 
     act(() => {
-      keydown(addTripButton, 'ArrowRight');
+      keydown(addDescriptionButton, 'ArrowRight');
     });
 
     expect(document.activeElement).toBe(addDeductionButton);
@@ -231,39 +232,39 @@ describe('section action buttons in the keyboard grid', () => {
       keydown(addDeductionButton, 'ArrowLeft');
     });
 
-    expect(document.activeElement).toBe(addTripButton);
+    expect(document.activeElement).toBe(addDescriptionButton);
   });
 
-  it('returns to the first trip row with ArrowDown', () => {
-    const [addTripButton] = tripActionButtons();
-    const firstCell = tripRows()[0].querySelector('input[data-nav]');
+  it('returns to the first description row with ArrowDown', () => {
+    const [addDescriptionButton] = descriptionActionButtons();
+    const firstCell = descriptionRows()[0].querySelector('input[data-nav]');
 
     act(() => {
-      addTripButton.focus();
+      addDescriptionButton.focus();
     });
 
     act(() => {
-      keydown(addTripButton, 'ArrowDown');
+      keydown(addDescriptionButton, 'ArrowDown');
     });
 
     expect(document.activeElement).toBe(firstCell);
   });
 
-  it('adds a trip and focuses it when Enter is pressed on Add Trip', async () => {
-    const [addTripButton] = tripActionButtons();
-    const before = tripRows().length;
+  it('adds a description and focuses it when Enter is pressed on Add Description', async () => {
+    const [addDescriptionButton] = descriptionActionButtons();
+    const before = descriptionRows().length;
 
     act(() => {
-      addTripButton.focus();
+      addDescriptionButton.focus();
     });
 
     act(() => {
-      keydown(addTripButton, 'Enter');
+      keydown(addDescriptionButton, 'Enter');
     });
 
     await flushAnimationFrame();
 
-    const rows = tripRows();
+    const rows = descriptionRows();
 
     expect(rows.length).toBe(before + 1);
     expect(document.activeElement).toBe(
@@ -272,10 +273,10 @@ describe('section action buttons in the keyboard grid', () => {
   });
 
   it('adds a deduction and focuses it when Enter is pressed on Add Deduction', async () => {
-    const [, addDeductionButton] = tripActionButtons();
+    const [, addDeductionButton] = descriptionActionButtons();
     const deductionRows = () =>
       container.querySelectorAll(
-        'tr[data-nav-section="trips"][data-row-type="deduction"]',
+        'tr[data-nav-section="descriptions"][data-row-type="deduction"]',
       );
     const before = deductionRows().length;
 

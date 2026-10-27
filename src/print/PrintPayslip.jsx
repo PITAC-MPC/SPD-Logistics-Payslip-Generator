@@ -1,10 +1,10 @@
 import PrintFooter from '../components/payslip/PrintFooter';
 import { formatDateLong, formatPeso, toNumber } from '../lib/format';
 
-function hasTripContent(row) {
+function hasDescriptionContent(row) {
   return Boolean(
-    String(row.location ?? '').trim() ||
-    String(row.trips ?? '').trim() ||
+    String(row.description ?? '').trim() ||
+    String(row.quantity ?? '').trim() ||
     String(row.rate ?? '').trim(),
   );
 }
@@ -63,7 +63,9 @@ export default function PrintPayslip({
   deductions,
   helperDeductions,
 }) {
-  const trips = (totals?.tripRows ?? []).filter(hasTripContent);
+  const descriptions = (totals?.descriptionRows ?? []).filter(
+    hasDescriptionContent,
+  );
   const helpers = (totals?.helperRows ?? []).filter(hasHelperContent);
 
   return (
@@ -106,69 +108,14 @@ export default function PrintPayslip({
 
       <section className="print-section">
         <div className="print-section-heading">
-          <span className="print-section-eyebrow">Earnings</span>
-          <h2 className="print-section-title">Trips</h2>
-        </div>
-
-        <table className="print-table">
-          <colgroup>
-            <col className="print-col-index" />
-            <col />
-            <col className="print-col-trips" />
-            <col className="print-col-rate" />
-            <col className="print-col-amount" />
-          </colgroup>
-          <thead>
-            <tr>
-              <th scope="col" className="print-row-number">
-                #
-              </th>
-              <th scope="col">Location</th>
-              <th scope="col" className="print-num">
-                Trips
-              </th>
-              <th scope="col" className="print-num">
-                Rate (&#8369;)
-              </th>
-              <th scope="col" className="print-num">
-                Amount
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {trips.map((row, index) => (
-              <tr key={row.id}>
-                <td className="print-row-number">{index + 1}</td>
-                <td>{row.location}</td>
-                <td className="print-num">{row.trips}</td>
-                <td className="print-num">{row.rate}</td>
-                <td className="print-num print-amount">
-                  {formatPeso(row.amount)}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-
-        <PrintSummary
-          total={totals?.tripTotal ?? 0}
-          deduction={totals?.tripDeduction ?? 0}
-          deductions={deductions}
-          net={totals?.tripNet ?? 0}
-        />
-      </section>
-
-      <section className="print-section print-helpers">
-        <div className="print-section-heading">
           <span className="print-section-eyebrow">Payouts</span>
-          <h2 className="print-section-title">Helpers</h2>
         </div>
 
         <table className="print-table">
           <colgroup>
             <col className="print-col-index" />
             <col />
-            <col className="print-col-trips" />
+            <col className="print-col-quantity" />
             <col className="print-col-rate" />
             <col className="print-col-amount" />
           </colgroup>
@@ -177,9 +124,9 @@ export default function PrintPayslip({
               <th scope="col" className="print-row-number">
                 #
               </th>
-              <th scope="col">Helper</th>
+              <th scope="col">Description</th>
               <th scope="col" className="print-num">
-                Number
+                Quantity
               </th>
               <th scope="col" className="print-num">
                 Rate (&#8369;)
@@ -190,11 +137,11 @@ export default function PrintPayslip({
             </tr>
           </thead>
           <tbody>
-            {helpers.map((row, index) => (
+            {descriptions.map((row, index) => (
               <tr key={row.id}>
                 <td className="print-row-number">{index + 1}</td>
-                <td>{row.name}</td>
-                <td className="print-num">{row.number}</td>
+                <td>{row.description}</td>
+                <td className="print-num">{row.quantity}</td>
                 <td className="print-num">{row.rate}</td>
                 <td className="print-num print-amount">
                   {formatPeso(row.amount)}
@@ -205,13 +152,69 @@ export default function PrintPayslip({
         </table>
 
         <PrintSummary
-          total={totals?.helperTotal ?? 0}
-          deduction={totals?.helperDeduction ?? 0}
-          deductions={helperDeductions}
-          net={totals?.helperNet ?? 0}
-          compact
+          total={totals?.descriptionTotal ?? 0}
+          deduction={totals?.descriptionDeduction ?? 0}
+          deductions={deductions}
+          net={totals?.descriptionNet ?? 0}
         />
       </section>
+
+      {helpers.length > 0 ? (
+        <section className="print-section print-helpers">
+          <div className="print-section-heading">
+            <span className="print-section-eyebrow">Payouts</span>
+            <h2 className="print-section-title">Helpers</h2>
+          </div>
+
+          <table className="print-table">
+            <colgroup>
+              <col className="print-col-index" />
+              <col />
+              <col className="print-col-quantity" />
+              <col className="print-col-rate" />
+              <col className="print-col-amount" />
+            </colgroup>
+            <thead>
+              <tr>
+                <th scope="col" className="print-row-number">
+                  #
+                </th>
+                <th scope="col">Helper</th>
+                <th scope="col" className="print-num">
+                  Number
+                </th>
+                <th scope="col" className="print-num">
+                  Rate (&#8369;)
+                </th>
+                <th scope="col" className="print-num">
+                  Amount
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {helpers.map((row, index) => (
+                <tr key={row.id}>
+                  <td className="print-row-number">{index + 1}</td>
+                  <td>{row.name}</td>
+                  <td className="print-num">{row.number}</td>
+                  <td className="print-num">{row.rate}</td>
+                  <td className="print-num print-amount">
+                    {formatPeso(row.amount)}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
+          <PrintSummary
+            total={totals?.helperTotal ?? 0}
+            deduction={totals?.helperDeduction ?? 0}
+            deductions={helperDeductions}
+            net={totals?.helperNet ?? 0}
+            compact
+          />
+        </section>
+      ) : null}
 
       <PrintFooter />
     </article>
