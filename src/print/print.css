@@ -115,7 +115,11 @@
   width: 8mm;
 }
 
-.print-col-quantity {
+.print-col-trips {
+  width: 20mm;
+}
+
+.print-col-number {
   width: 20mm;
 }
 

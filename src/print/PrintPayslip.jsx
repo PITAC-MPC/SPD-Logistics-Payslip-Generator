@@ -4,7 +4,7 @@ import { formatDateLong, formatPeso, toNumber } from '../lib/format';
 function hasDescriptionContent(row) {
   return Boolean(
     String(row.description ?? '').trim() ||
-    String(row.quantity ?? '').trim() ||
+    String(row.trips ?? row.quantity ?? '').trim() ||
     String(row.rate ?? '').trim(),
   );
 }
@@ -115,7 +115,7 @@ export default function PrintPayslip({
           <colgroup>
             <col className="print-col-index" />
             <col />
-            <col className="print-col-quantity" />
+            <col className="print-col-trips" />
             <col className="print-col-rate" />
             <col className="print-col-amount" />
           </colgroup>
@@ -126,7 +126,7 @@ export default function PrintPayslip({
               </th>
               <th scope="col">Description</th>
               <th scope="col" className="print-num">
-                Quantity
+                Trips
               </th>
               <th scope="col" className="print-num">
                 Rate (&#8369;)
@@ -141,7 +141,7 @@ export default function PrintPayslip({
               <tr key={row.id}>
                 <td className="print-row-number">{index + 1}</td>
                 <td>{row.description}</td>
-                <td className="print-num">{row.quantity}</td>
+                <td className="print-num">{row.trips}</td>
                 <td className="print-num">{row.rate}</td>
                 <td className="print-num print-amount">
                   {formatPeso(row.amount)}
@@ -161,36 +161,14 @@ export default function PrintPayslip({
 
       {helpers.length > 0 ? (
         <section className="print-section print-helpers">
-          <div className="print-section-heading">
-            <span className="print-section-eyebrow">Payouts</span>
-            <h2 className="print-section-title">Helpers</h2>
-          </div>
-
           <table className="print-table">
             <colgroup>
               <col className="print-col-index" />
               <col />
-              <col className="print-col-quantity" />
+              <col className="print-col-number" />
               <col className="print-col-rate" />
               <col className="print-col-amount" />
             </colgroup>
-            <thead>
-              <tr>
-                <th scope="col" className="print-row-number">
-                  #
-                </th>
-                <th scope="col">Helper</th>
-                <th scope="col" className="print-num">
-                  Number
-                </th>
-                <th scope="col" className="print-num">
-                  Rate (&#8369;)
-                </th>
-                <th scope="col" className="print-num">
-                  Amount
-                </th>
-              </tr>
-            </thead>
             <tbody>
               {helpers.map((row, index) => (
                 <tr key={row.id}>

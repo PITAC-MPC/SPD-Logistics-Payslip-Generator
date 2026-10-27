@@ -49,17 +49,19 @@ afterEach(() => {
 });
 
 describe('draft migration', () => {
-  it('loads legacy trip rows as descriptions with quantities', () => {
+  it('loads legacy trip rows as descriptions', () => {
     const descriptionRows = container.querySelectorAll(
       'tr[data-nav-section="descriptions"][data-row-type="main"]',
     );
     const firstRow = descriptionRows[0];
-    const [descriptionInput, quantityInput, rateInput] =
+    const [descriptionInput, tripsInput, rateInput] =
       firstRow.querySelectorAll('input[data-nav]');
 
     expect(descriptionInput.value).toBe('Old route');
-    expect(quantityInput.value).toBe('3');
+    expect(tripsInput.value).toBe('3');
     expect(rateInput.value).toBe('100');
+    expect(container.textContent).toContain('Trips');
+    expect(container.textContent).not.toContain('Quantity');
     expect(container.textContent).toContain('Total Amount');
     expect(container.textContent).toContain('300.00');
   });

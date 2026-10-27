@@ -27,12 +27,12 @@ function makeState(overrides = {}) {
 }
 
 describe('description calculations', () => {
-  it('multiplies quantities by rate and totals the rows', () => {
+  it('multiplies trips by rate and totals the rows', () => {
     const result = computePayslip(
       makeState({
         descriptions: [
-          { quantity: '2', rate: '150' },
-          { quantity: '3', rate: '100.50' },
+          { trips: '2', rate: '150' },
+          { trips: '3', rate: '100.50' },
         ],
       }),
     );
@@ -43,10 +43,20 @@ describe('description calculations', () => {
     expect(result.descriptionTotal).toBe(601.5);
   });
 
+  it('supports the legacy quantity field', () => {
+    const result = computePayslip(
+      makeState({
+        descriptions: [{ quantity: '3', rate: '100' }],
+      }),
+    );
+
+    expect(result.descriptionRows[0].amount).toBe(300);
+  });
+
   it('subtracts the deduction rows from the description total', () => {
     const result = computePayslip(
       makeState({
-        descriptions: [{ quantity: '4', rate: '125' }],
+        descriptions: [{ trips: '4', rate: '125' }],
         deductions: [{ id: 'd1', reason: 'Fuel advance', amount: '100.50' }],
       }),
     );
@@ -59,7 +69,7 @@ describe('description calculations', () => {
   it('sums multiple description deductions', () => {
     const result = computePayslip(
       makeState({
-        descriptions: [{ quantity: '2', rate: '500' }],
+        descriptions: [{ trips: '2', rate: '500' }],
         deductions: [
           { id: 'd1', reason: 'Fuel advance', amount: '100' },
           { id: 'd2', reason: 'Cash advance', amount: '75.25' },
@@ -74,7 +84,7 @@ describe('description calculations', () => {
   it('allows a negative net when the deduction is larger than the total', () => {
     const result = computePayslip(
       makeState({
-        descriptions: [{ quantity: '1', rate: '100' }],
+        descriptions: [{ trips: '1', rate: '100' }],
         deductions: [{ id: 'd1', reason: 'Advance', amount: '150' }],
       }),
     );
@@ -101,7 +111,7 @@ describe('helper calculations', () => {
   it('keeps the helper net separate from the description net', () => {
     const result = computePayslip(
       makeState({
-        descriptions: [{ description: 'Route A', quantity: '2', rate: '500' }],
+        descriptions: [{ description: 'Route A', trips: '2', rate: '500' }],
         deductions: [{ id: 'd1', reason: 'Fuel', amount: '100' }],
         helpers: [{ name: 'Helper', number: '1', rate: '200' }],
         helperDeductions: [{ id: 'h1', reason: 'Advance', amount: '25' }],
@@ -132,7 +142,7 @@ describe('blank and numeric input handling', () => {
   it('treats blank values as zero', () => {
     const result = computePayslip(
       makeState({
-        descriptions: [{ description: '', quantity: '', rate: '' }],
+        descriptions: [{ description: '', trips: '', rate: '' }],
         deductions: [{ id: 'd1', reason: '', amount: '' }],
         helpers: [{ name: 'Helper', number: '', rate: '' }],
         helperDeductions: [{ id: 'h1', reason: '', amount: '' }],

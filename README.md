@@ -63,7 +63,7 @@ npm run dist      # Build the Windows NSIS and portable releases
 | ------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------- |
 | `src/components/payslip/PayslipHeader.jsx`       | Driver metadata form for name, vehicle type, plate number, and date.                                                              |
 | `src/components/payslip/DescriptionsSection.jsx` | Payout descriptions section. Renders the description table, Add Description action, empty state, deduction sub-table, and totals. |
-| `src/components/payslip/DescriptionRow.jsx`      | Editable row for one payout description. Handles description, quantity, rate, computed amount, and row removal.                   |
+| `src/components/payslip/DescriptionRow.jsx`      | Editable row for one payout description. Handles description, trips, rate, computed amount, and row removal.                      |
 | `src/components/payslip/HelpersSection.jsx`      | Helper payout section. Renders the helper table, Add Helper action, empty state, deduction sub-table, and totals.                 |
 | `src/components/payslip/HelperRow.jsx`           | Editable row for one helper. Handles helper name, headcount, rate, computed amount, and row removal.                              |
 | `src/components/payslip/DeductionsTable.jsx`     | Deduction sub-table for a section. Renders the deductions heading, rows, remove actions, and empty state.                         |

@@ -70,9 +70,21 @@ describe('print helper section', () => {
         helpers: [{ id: 'h1', name: 'Juan', number: '1', rate: '200' }],
       }),
     );
+    const helperSection = markup.slice(markup.indexOf('print-helpers'));
 
     expect(markup).toContain('print-helpers');
-    expect(markup).toContain('Helpers');
+    expect(helperSection).not.toContain('print-section-heading');
+    expect(helperSection).not.toContain('<thead');
+    expect(helperSection).not.toContain('Helpers');
     expect(markup).toContain('Juan');
+  });
+});
+
+describe('print headings', () => {
+  it('uses Trips instead of Quantity', () => {
+    const markup = renderPrint(makeState());
+
+    expect(markup).toContain('>Trips<');
+    expect(markup).not.toContain('Quantity');
   });
 });

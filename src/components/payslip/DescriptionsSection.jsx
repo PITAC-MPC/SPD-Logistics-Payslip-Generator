@@ -57,7 +57,7 @@ export default function DescriptionsSection({
             <colgroup>
               <col className="col-index" />
               <col />
-              <col className="col-quantity" />
+              <col className="col-trips" />
               <col className="col-rate" />
               <col className="col-amount" />
               <col className="col-action" />
@@ -69,7 +69,7 @@ export default function DescriptionsSection({
                 </th>
                 <th scope="col">Description</th>
                 <th scope="col" className="numeric-cell text-end">
-                  Quantity
+                  Trips
                 </th>
                 <th scope="col" className="numeric-cell text-end">
                   Rate (&#8369;)

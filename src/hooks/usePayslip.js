@@ -23,7 +23,7 @@ function createDescription() {
   return {
     id: makeId(),
     description: '',
-    quantity: '',
+    trips: '',
     rate: '',
   };
 }
@@ -64,7 +64,7 @@ function normalizeDescription(row) {
   return {
     id: typeof row?.id === 'string' && row.id ? row.id : makeId(),
     description: String(row?.description ?? row?.location ?? ''),
-    quantity: sanitizeIntegerString(row?.quantity ?? row?.trips ?? ''),
+    trips: sanitizeIntegerString(row?.trips ?? row?.quantity ?? ''),
     rate: sanitizeDecimalString(row?.rate ?? ''),
   };
 }
@@ -194,8 +194,8 @@ export default function usePayslip() {
       descriptions: current.descriptions.map((row) => {
         if (row.id !== id) return row;
 
-        if (field === 'quantity') {
-          return { ...row, quantity: sanitizeIntegerString(value) };
+        if (field === 'trips') {
+          return { ...row, trips: sanitizeIntegerString(value) };
         }
 
         if (field === 'rate') {

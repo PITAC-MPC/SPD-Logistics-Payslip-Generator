@@ -3,7 +3,7 @@ import { round2, toNumber } from './format';
 export function computeDescriptionRows(descriptions = []) {
   return descriptions.map((row) => ({
     ...row,
-    amount: round2(toNumber(row.quantity ?? row.trips) * toNumber(row.rate)),
+    amount: round2(toNumber(row.trips ?? row.quantity) * toNumber(row.rate)),
   }));
 }
 

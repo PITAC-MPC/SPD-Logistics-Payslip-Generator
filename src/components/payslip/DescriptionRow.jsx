@@ -2,7 +2,7 @@ import { formatPeso } from '../../lib/format';
 import NumericInput from '../ui/NumericInput';
 
 export default function DescriptionRow({ row, index, onUpdate, onRemove }) {
-  const isEmpty = !row.description.trim() && !row.quantity && !row.rate;
+  const isEmpty = !row.description.trim() && !row.trips && !row.rate;
 
   return (
     <tr
@@ -31,11 +31,11 @@ export default function DescriptionRow({ row, index, onUpdate, onRemove }) {
         <NumericInput
           data-nav
           integer
-          value={row.quantity}
-          onValueChange={(value) => onUpdate('quantity', value)}
+          value={row.trips}
+          onValueChange={(value) => onUpdate('trips', value)}
           className="form-control-sm table-input text-end"
           placeholder="0"
-          aria-label={`Quantity for row ${index + 1}`}
+          aria-label={`Trips for row ${index + 1}`}
         />
       </td>
 
