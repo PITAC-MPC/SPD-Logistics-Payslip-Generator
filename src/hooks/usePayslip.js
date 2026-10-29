@@ -32,7 +32,7 @@ function createHelper() {
   return {
     id: makeId(),
     name: 'Helper',
-    number: '1',
+    number: '',
     rate: '',
   };
 }
@@ -73,7 +73,7 @@ function normalizeHelper(row) {
   return {
     id: typeof row?.id === 'string' && row.id ? row.id : makeId(),
     name: String(row?.name ?? 'Helper'),
-    number: sanitizeIntegerString(row?.number ?? '1'),
+    number: sanitizeIntegerString(row?.number ?? ''),
     rate: sanitizeDecimalString(row?.rate ?? ''),
   };
 }

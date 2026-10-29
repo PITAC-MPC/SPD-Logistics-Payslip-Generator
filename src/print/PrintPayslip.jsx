@@ -34,7 +34,6 @@ function PrintSummary({
         <>
           <div className="print-summary-deductions-head">
             <span>Deductions</span>
-            <span>{formatPeso(deduction)}</span>
           </div>
           {deductionRows.map((row) => (
             <div className="print-summary-deduction-row" key={row.id}>
@@ -42,6 +41,10 @@ function PrintSummary({
               <span>{formatPeso(row.amount)}</span>
             </div>
           ))}
+          <div className="print-summary-row print-summary-deductions-total">
+            <span>Total</span>
+            <span>{formatPeso(deduction)}</span>
+          </div>
         </>
       ) : (
         <div className="print-summary-row">
@@ -169,6 +172,23 @@ export default function PrintPayslip({
               <col className="print-col-rate" />
               <col className="print-col-amount" />
             </colgroup>
+            <thead>
+              <tr>
+                <th scope="col" className="print-row-number">
+                  #
+                </th>
+                <th scope="col">Helper</th>
+                <th scope="col" className="print-num">
+                  Number
+                </th>
+                <th scope="col" className="print-num">
+                  Rate (&#8369;)
+                </th>
+                <th scope="col" className="print-num">
+                  Amount
+                </th>
+              </tr>
+            </thead>
             <tbody>
               {helpers.map((row, index) => (
                 <tr key={row.id}>

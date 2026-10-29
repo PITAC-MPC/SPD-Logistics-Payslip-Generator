@@ -74,9 +74,35 @@ describe('print helper section', () => {
 
     expect(markup).toContain('print-helpers');
     expect(helperSection).not.toContain('print-section-heading');
-    expect(helperSection).not.toContain('<thead');
     expect(helperSection).not.toContain('Helpers');
+    expect(helperSection).toContain('<thead');
+    expect(helperSection).toContain('<th scope="col">Helper</th>');
+    expect(helperSection).toContain('>Number<');
+    expect(helperSection).toContain('>Amount<');
     expect(markup).toContain('Juan');
+  });
+});
+
+describe('print deductions', () => {
+  it('places the deduction total below the listed deductions', () => {
+    const markup = renderPrint(
+      makeState({
+        deductions: [
+          { id: 'd1', reason: 'Fuel', amount: '100' },
+          { id: 'd2', reason: 'Toll', amount: '50' },
+        ],
+      }),
+    );
+    const totalIndex = markup.indexOf('print-summary-deductions-total');
+
+    expect(markup).toContain(
+      '<div class="print-summary-deductions-head"><span>Deductions</span></div>',
+    );
+    expect(markup.indexOf('>Fuel<')).toBeLessThan(totalIndex);
+    expect(markup.indexOf('>Toll<')).toBeLessThan(totalIndex);
+    expect(markup.slice(totalIndex)).toContain(
+      '<span>Total</span><span>₱150.00</span>',
+    );
   });
 });
 

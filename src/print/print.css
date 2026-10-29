@@ -244,6 +244,15 @@
   white-space: nowrap;
 }
 
+.print-summary-deductions-total {
+  border-top: 0.5pt solid #e5e7eb;
+}
+
+.print-summary-deductions-total > span:first-child {
+  color: #111827;
+  font-weight: 700;
+}
+
 .print-summary-net {
   margin-top: 1pt;
   padding-top: 2pt;

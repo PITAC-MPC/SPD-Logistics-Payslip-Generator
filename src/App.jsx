@@ -10,6 +10,23 @@ import { computePayslip } from './lib/calculations';
 import { buildPdfFileName } from './lib/format';
 import PrintPayslip from './print/PrintPayslip';
 
+const TEXT_INPUT_TYPES = new Set(['text', 'search', 'tel', 'url', 'password']);
+
+function moveCaretToEnd(event) {
+  const input = event.target;
+
+  if (
+    input?.tagName !== 'INPUT' ||
+    typeof input.setSelectionRange !== 'function' ||
+    !TEXT_INPUT_TYPES.has(input.type)
+  ) {
+    return;
+  }
+
+  const end = input.value.length;
+  input.setSelectionRange(end, end);
+}
+
 export default function App() {
   const {
     state,
@@ -148,7 +165,7 @@ export default function App() {
 
   return (
     <>
-      <div className="app-shell">
+      <div className="app-shell" onFocus={moveCaretToEnd}>
         <AppBar
           onNew={handleNewPayslip}
           onPrint={handlePrint}

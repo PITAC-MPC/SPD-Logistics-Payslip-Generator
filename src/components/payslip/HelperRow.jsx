@@ -34,7 +34,7 @@ export default function HelperRow({ row, index, onUpdate, onRemove }) {
           value={row.number}
           onValueChange={(value) => onUpdate('number', value)}
           className="form-control-sm table-input text-end"
-          placeholder="1"
+          placeholder="0"
           aria-label={`Number of helpers for helper row ${index + 1}`}
         />
       </td>
